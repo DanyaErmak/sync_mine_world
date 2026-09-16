@@ -1,0 +1,8 @@
+__pycache__/
+build/
+dist/
+sync_mine_world.spec
+.venv/
+.vscode/
+.DS.Store/
+.ruff_cache/
