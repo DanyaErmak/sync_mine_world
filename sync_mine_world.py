@@ -5,7 +5,7 @@ from datetime import datetime
 import webbrowser
 from lexicon import LEXICON_RU
 from find_java import find_java
-from func import waiting_right_path, lock_server, write_to_start_file, is_server_running
+from func import *
 
 server_folder_name = 'Minecraft_server'
 
@@ -77,6 +77,7 @@ while choice != '0':
 
             write_to_start_file(local_server_folder / 'start.bat', java)
             lock_server(lock_file)
+            update_players_base(cloud_dir)
 
             print(LEXICON_RU['ready_server'])
         else:
