@@ -33,3 +33,45 @@ def is_server_running() -> bool:
         return False
     except Exception:
         return False
+
+def get_radmin_ip() -> str:
+    '''Возвращает ip-адрес сетевого адаптера Radmin VPN при его наличии'''
+    try:
+        result = subprocess.run(['ipconfig'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding='cp866')
+        for block in result.stdout.split('Адаптер'):
+            if 'Radmin VPN' in block:
+                for line in block.split('\n'):
+                    if 'IPv4' in line:
+                        ip = line.split(':')[-1].strip()
+                        return ip
+        return '127.0.0.1'
+    except Exception:
+        return '127.0.0.1'
+
+def update_players_base(cloud_dir: Path) -> None:
+    '''Обновляет или добавляет имя ПК и ip-адрес хоста '''
+    ip_file = cloud_dir / 'players.txt'
+    my_name = os.getlogin()
+    my_ip = get_radmin_ip()
+
+    if my_ip == "127.0.0.1":
+        return
+
+    lines = []
+    player_found = False
+    if ip_file.exists():
+        with open(ip_file, 'r', encoding='utf-8') as file:
+            for line in file:
+                if line.strip():
+                    name, ip = line.strip().spilt(':')
+                    if name == my_name:
+                        lines.append(f"{my_name}:{my_ip}\n")
+                        player_found = True
+                    else:
+                        lines.append(line)
+
+    if not player_found:
+        lines.append(f'{my_name}:{my_ip}\n')
+
+    with open(ip_file, 'w', encoding='utf-8') as file:
+        file.writelines(lines)
