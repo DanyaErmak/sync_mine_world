@@ -17,10 +17,19 @@ cloud_G = Path('G:/')
 cloud_dir = None
 for path in [cloud_D, cloud_C, cloud_G]:
     if path.exists():
-        found_folder = list(path.glob('**/Minecraft_shared'))
-        if found_folder:
-            cloud_dir = found_folder[0]
+        stadart_path = path / 'Мой диск' / 'Minecraft_shared'
+        if stadart_path.exists():
+            cloud_dir = stadart_path
             break
+        shortcut_path = path / 'shortcut-targets-by-id'
+        if shortcut_path.exists():
+            for folder in shortcut_path.glob('*'):
+                target_path = folder / 'Minecraft_shared'
+                if target_path.exists():
+                    cloud_dir = target_path
+                    break
+    if cloud_dir:
+        break
 
 if cloud_dir is None:
     cloud_dir = Path('G:/Мой диск/Minecraft_shared')
