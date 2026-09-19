@@ -3,6 +3,7 @@ import shutil
 from pathlib import Path
 from datetime import datetime
 import webbrowser
+import tkinter as tk
 from lexicon import LEXICON_RU
 from find_java import find_java
 from func import *
@@ -123,6 +124,28 @@ while choice != '0':
         if lock_file.exists():
             lock_file.unlink()
         print(LEXICON_RU['loaded_archive'])
+    elif choice == '3':
+        if lock_file.exists():
+            with open(lock_file, 'r', encoding='utf-8') as lf:
+                host_name = lf.read().strip()
+
+            ip_file = cloud_dir / 'players_ip.txt'
+            if ip_file.exists():
+                with open(ip_file, 'r', encoding='utf-8') as ipf:
+                    for line in ipf:
+                        if host_name in line:
+                            host_ip = line.strip().split(':')[-1]
+
+                            t = tk.Tk()
+                            t.withdraw()
+                            t.clipboard_clear()
+                            t.clipboard_append(host_ip)
+                            t.update()
+                            t.destroy()
+                            print(f'IP-адрес хоста ({host_ip}) скопирован в буфер обмена!')
+                            print(LEXICON_RU['ctrlv_in_mine'])
+        else:
+            print(LEXICON_RU['not_server'])
     elif choice == '0':
         pass
     else:
