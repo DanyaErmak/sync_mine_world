@@ -10,7 +10,7 @@ from func import *
 
 server_folder_name = 'Minecraft_server'
 
-cloud_D = Path('D:/GoogleDrivee')
+cloud_D = Path('D:/GoogleDrive')
 cloud_C = Path('C:/GoogleDrive')
 cloud_G = Path('G:/')
 
