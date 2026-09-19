@@ -50,7 +50,7 @@ def get_radmin_ip() -> str:
 
 def update_players_base(cloud_dir: Path) -> None:
     '''Обновляет или добавляет имя ПК и ip-адрес хоста '''
-    ip_file = cloud_dir / 'players.txt'
+    ip_file = cloud_dir / 'players_ip.txt'
     my_name = os.getlogin()
     my_ip = get_radmin_ip()
 
@@ -63,7 +63,7 @@ def update_players_base(cloud_dir: Path) -> None:
         with open(ip_file, 'r', encoding='utf-8') as file:
             for line in file:
                 if line.strip():
-                    name, ip = line.strip().spilt(':')
+                    name, ip = line.strip().split(':')
                     if name == my_name:
                         lines.append(f"{my_name}:{my_ip}\n")
                         player_found = True
