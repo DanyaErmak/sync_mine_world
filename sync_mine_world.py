@@ -10,29 +10,20 @@ from func import *
 
 server_folder_name = 'Minecraft_server'
 
-cloud_D = Path('D:/GoogleDrive')
-cloud_C = Path('C:/GoogleDrive')
-cloud_G = Path('G:/')
+possible_paths = [
+    Path('M:/Minecraft_shared'),
+    Path('G:/Minecraft_shared'),
+    Path('Y:/Minecraft_shared'),
+]
 
 cloud_dir = None
-for path in [cloud_D, cloud_C, cloud_G]:
+for path in possible_paths:
     if path.exists():
-        stadart_path = path / 'Мой диск' / 'Minecraft_shared'
-        if stadart_path.exists():
-            cloud_dir = stadart_path
-            break
-        shortcut_path = path / 'shortcut-targets-by-id'
-        if shortcut_path.exists():
-            for folder in shortcut_path.glob('*'):
-                target_path = folder / 'Minecraft_shared'
-                if target_path.exists():
-                    cloud_dir = target_path
-                    break
-    if cloud_dir:
+        cloud_dir = path
         break
 
 if cloud_dir is None:
-    cloud_dir = Path('G:/Мой диск/Minecraft_shared')
+    cloud_dir = Path('M:/Minecraft_shared')
     cloud_dir = waiting_right_path(cloud_dir, LEXICON_RU['no_cloud_folder'])
 
 lock_file = cloud_dir / 'world.lock'
@@ -107,7 +98,7 @@ while choice != '0':
 
         if current_host != os.getlogin():
             print(LEXICON_RU['error_launch'])
-            print(f'Имя комьютера, который сейчас является хостом: {current_host}')
+            print(f'Имя комьютера, который сейчас является хостом: {current_host}\n')
             continue
 
         if cloud_zip.exists():
@@ -119,7 +110,7 @@ while choice != '0':
             print(LEXICON_RU['created_backup'])
 
         all_backups = list(cloud_dir.glob('*_backup_*.zip'))
-        if len(all_backups) > 5:
+        if len(all_backups) > 3:
             min(all_backups, key = lambda x: x.stat().st_mtime_ns).unlink()
             print(LEXICON_RU['del_backup'])
 
@@ -133,6 +124,7 @@ while choice != '0':
         if lock_file.exists():
             lock_file.unlink()
         print(LEXICON_RU['loaded_archive'])
+
     elif choice == '3':
         if lock_file.exists():
             with open(lock_file, 'r', encoding='utf-8') as lf:
@@ -151,7 +143,7 @@ while choice != '0':
                             t.clipboard_append(host_ip)
                             t.update()
                             t.destroy()
-                            print(f'IP-адрес хоста ({host_ip}) скопирован в буфер обмена!')
+                            print(f'\nIP-адрес хоста ({host_ip}) скопирован в буфер обмена!')
                             print(LEXICON_RU['ctrlv_in_mine'])
         else:
             print(LEXICON_RU['not_server'])
