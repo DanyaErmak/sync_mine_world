@@ -1,7 +1,7 @@
 __pycache__/
 build/
 dist/
-sync_mine_world.spec
+*.spec
 .venv/
 .vscode/
 .DS.Store/
